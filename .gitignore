@@ -72,3 +72,5 @@ fabric.properties
 # Libraries
 servlet-api.jar
 
+# Compiled class files
+*.class
