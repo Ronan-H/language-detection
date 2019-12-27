@@ -151,7 +151,7 @@ public enum Language {
 	NorthernSotho ("Northern Sotho"),
 	NorwegianNynorsk ("Norwegian Nynorsk"),
 	Occitan ("Occitan"),
-	OldEnglish  ("OldEnglish "),
+	OldEnglish ("OldEnglish"),
 	Oriya ("Oriya"),
 	Oromo ("Oromo"),
 	Ossetian ("Ossetian"),
