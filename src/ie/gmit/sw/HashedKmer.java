@@ -4,6 +4,7 @@ public class HashedKmer {
     private int hashRange;
     private int[] freqs;
     private Language language;
+    private int numRecords;
 
     public HashedKmer(Language language, int hashRange) {
         this.hashRange = hashRange;
@@ -20,5 +21,21 @@ public class HashedKmer {
 
         int index = hash % hashRange;
         freqs[index] += 1;
+
+        numRecords++;
+    }
+
+    public double[] getDistribution() {
+        double[] dist = new double[hashRange];
+
+        for (int i = 0; i < hashRange; i++) {
+            dist[i] = (double) freqs[i] / numRecords;
+        }
+
+        return dist;
+    }
+
+    public Language getLanguage() {
+        return language;
     }
 }
