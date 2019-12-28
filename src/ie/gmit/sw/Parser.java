@@ -34,8 +34,8 @@ public class Parser {
         Language language = Language.valueOf(lang);
 
         for (int i = 0; i <= text.length() - k; i++) {
-            CharSequence kmer = text.substring(i, i + k);
-            db.add(kmer, language);
+            String kmer = text.substring(i, i + k);
+            //db.add(kmer, language);
         }
     }
 }

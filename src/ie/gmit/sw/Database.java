@@ -112,7 +112,11 @@ public class Database {
 		
 		
 	}
-	
+
+	public void merge(Database other) {
+
+	}
+
 	@Override
 	public String toString() {
 		
