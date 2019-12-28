@@ -3,26 +3,31 @@ package ie.gmit.sw;
 import java.util.*;
 
 public class Database {
-	private Map<Language, Map<Integer, LanguageEntry>> db = new TreeMap<>();
-	
-	public void add(CharSequence s, Language lang) {
-		int kmer = s.hashCode();
-		Map<Integer, LanguageEntry> langDb = getLanguageEntries(lang);
-		
-		int frequency = 1;
-		if (langDb.containsKey(kmer)) {
-			frequency += langDb.get(kmer).getFrequency();
+	private Map<Language, Map<Long, KmerFreq>> db = new TreeMap<>();
+
+	public void add(short[] kmer, Language lang) {
+		long key = 0;
+
+		for (int i = 0; i  < kmer.length; i++) {
+			key <<= 16;
+			key |= kmer[i];
 		}
-		langDb.put(kmer, new LanguageEntry(kmer, frequency));
-		
+
+		Map<Long, KmerFreq> langDb = getLanguageEntries(lang);
+
+		int frequency = 1;
+		if (langDb.containsKey(key)) {
+			frequency += langDb.get(key).getFrequency();
+		}
+		langDb.put(key, new KmerFreq(key, frequency));
 	}
 	
-	private Map<Integer, LanguageEntry> getLanguageEntries(Language lang){
-		Map<Integer, LanguageEntry> langDb = null; 
+	private Map<Long, KmerFreq> getLanguageEntries(Language lang){
+		Map<Long, KmerFreq> langDb = null;
 		if (db.containsKey(lang)) {
 			langDb = db.get(lang);
 		}else {
-			langDb = new TreeMap<Integer, LanguageEntry>();
+			langDb = new TreeMap<Long, KmerFreq>();
 			db.put(lang, langDb);
 		}
 		return langDb;
@@ -31,18 +36,18 @@ public class Database {
 	public void resize(int max) {
 		Set<Language> keys = db.keySet();
 		for (Language lang : keys) {
-			Map<Integer, LanguageEntry> top = getTop(max, lang);
+			Map<Long, KmerFreq> top = getTop(max, lang);
 			db.put(lang, top);
 		}
 	}
 	
-	public Map<Integer, LanguageEntry> getTop(int max, Language lang) {
-		Map<Integer, LanguageEntry> temp = new TreeMap<>();
-		List<LanguageEntry> les = new ArrayList<>(db.get(lang).values());
+	public Map<Long, KmerFreq> getTop(int max, Language lang) {
+		Map<Long, KmerFreq> temp = new TreeMap<>();
+		List<KmerFreq> les = new ArrayList<>(db.get(lang).values());
 		Collections.sort(les);
 		
 		int rank = 1;
-		for (LanguageEntry le : les) {
+		for (KmerFreq le : les) {
 			le.setRank(rank);
 			temp.put(le.getKmer(), le);			
 			if (rank == max) break;
@@ -52,7 +57,7 @@ public class Database {
 		return temp;
 	}
 	
-	public Language getLanguage(Map<Integer, LanguageEntry> query) {
+	public Language getLanguage(Map<Long, KmerFreq> query) {
 		TreeSet<OutOfPlaceMetric> oopm = new TreeSet<>();
 		
 		Set<Language> langs = db.keySet();
@@ -62,12 +67,12 @@ public class Database {
 		return oopm.first().getLanguage();
 	}
 	
-	private int getOutOfPlaceDistance(Map<Integer, LanguageEntry> query, Map<Integer, LanguageEntry> subject) {
+	private int getOutOfPlaceDistance(Map<Long, KmerFreq> query, Map<Long, KmerFreq> subject) {
 		int distance = 0;
 		
-		Set<LanguageEntry> les = new TreeSet<>(query.values());		
-		for (LanguageEntry q : les) {
-			LanguageEntry s = subject.get(q.getKmer());
+		Set<KmerFreq> les = new TreeSet<>(query.values());
+		for (KmerFreq q : les) {
+			KmerFreq s = subject.get(q.getKmer());
 			if (s == null) {
 				distance += subject.size() + 1;
 			}else {
@@ -120,9 +125,9 @@ public class Database {
 			langCount++;
 			sb.append(lang.name() + "->\n");
 			 
-			 Collection<LanguageEntry> m = new TreeSet<>(db.get(lang).values());
+			 Collection<KmerFreq> m = new TreeSet<>(db.get(lang).values());
 			 kmerCount += m.size();
-			 for (LanguageEntry le : m) {
+			 for (KmerFreq le : m) {
 				 sb.append("\t" + le + "\n");
 			 }
 		}

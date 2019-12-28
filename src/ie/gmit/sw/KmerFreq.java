@@ -1,21 +1,21 @@
 package ie.gmit.sw;
 
-public class LanguageEntry implements Comparable<LanguageEntry> {
-	private int kmer;
+public class KmerFreq implements Comparable<KmerFreq> {
+	private long kmer;
 	private int frequency;
 	private int rank;
 
-	public LanguageEntry(int kmer, int frequency) {
+	public KmerFreq(long kmer, int frequency) {
 		super();
 		this.kmer = kmer;
 		this.frequency = frequency;
 	}
 
-	public int getKmer() {
+	public long getKmer() {
 		return kmer;
 	}
 
-	public void setKmer(int kmer) {
+	public void setKmer(long kmer) {
 		this.kmer = kmer;
 	}
 
@@ -36,7 +36,7 @@ public class LanguageEntry implements Comparable<LanguageEntry> {
 	}
 
 	@Override
-	public int compareTo(LanguageEntry next) {
+	public int compareTo(KmerFreq next) {
 		return - Integer.compare(frequency, next.getFrequency());
 	}
 	

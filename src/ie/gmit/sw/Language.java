@@ -235,7 +235,10 @@ public enum Language {
 	Yakut ("Yakut"),
 	Yiddish ("Yiddish"),
 	Yoruba ("Yoruba"),
-	Zeeuws ("Zeeuws");
+	Zeeuws ("Zeeuws"),
+
+	// unidentified language
+	Unidentified ("Unidentified");
 	
 	private final CharSequence language;
 
