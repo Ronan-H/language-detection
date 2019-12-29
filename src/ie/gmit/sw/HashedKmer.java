@@ -7,6 +7,7 @@ public class HashedKmer {
     private int numRecords;
 
     public HashedKmer(Language language, int hashRange) {
+        this.language = language;
         this.hashRange = hashRange;
         freqs = new int[hashRange];
     }
@@ -19,10 +20,23 @@ public class HashedKmer {
             hash = hash * 31 + c;
         }
 
-        int index = hash % hashRange;
+        int index = (hash & 0x7FFFFFFF) % hashRange;
         freqs[index] += 1;
 
         numRecords++;
+    }
+
+    public void recordLine(String line, int k) {
+        char[] sample = line.toCharArray();
+        short[] kmer = new short[k];
+
+        for (int i = 0; i <= sample.length - k; i++) {
+            for (int j = 0; j < k; j++) {
+                kmer[j] = (short) sample[i + j];
+            }
+
+            recordKmer(kmer);
+        }
     }
 
     public double[] getDistribution() {

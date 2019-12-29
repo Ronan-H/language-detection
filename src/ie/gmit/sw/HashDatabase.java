@@ -39,7 +39,7 @@ public class HashDatabase {
         return bestFitLang;
     }
 
-    public double getDistance(double[] dist1, double[] dist2) {
+    private double getDistance(double[] dist1, double[] dist2) {
         double totalDist = 0;
 
         for (int i = 0; i < hashRange; i++) {
@@ -47,6 +47,10 @@ public class HashDatabase {
         }
 
         return totalDist;
+    }
+
+    public HashedKmer getHashedKmer(Language lang) {
+        return map.get(lang);
     }
 
     public void recordKmer(Language lang, short[] kmer) {

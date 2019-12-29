@@ -4,11 +4,11 @@ import java.io.*;
 
 public class Parser {
     private String filePath;
-    private Database db;
+    private HashDatabase db;
 
     public Parser(String filePath) {
         this.filePath = filePath;
-        db = new Database();
+        db = new HashDatabase(1024);
     }
 
     public void parseFile() {
@@ -32,10 +32,13 @@ public class Parser {
 
     public void parseLine(String lang, String text, int k) {
         Language language = Language.valueOf(lang);
+        char[] sample = text.toCharArray();
+        short[] kmer = new short[k];
 
-        for (int i = 0; i <= text.length() - k; i++) {
-            String kmer = text.substring(i, i + k);
-            //db.add(kmer, language);
-        }
+        db.getHashedKmer(language).recordLine(text, k);
+    }
+
+    public HashDatabase getDb() {
+        return db;
     }
 }
