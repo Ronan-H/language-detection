@@ -26,5 +26,3 @@ public class LanguageSample {
         return sample;
     }
 }
-
-class Poison extends LanguageSample {}

@@ -4,31 +4,34 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class HashDatabase {
+public class LanguageDistributionDatabase {
     private int hashRange;
-    private Map<Language, HashedKmer> map;
+    private Map<Language, LanguageDistribution> map;
 
-    public HashDatabase(int hashRange) {
+    public LanguageDistributionDatabase(int hashRange) {
         this.hashRange = hashRange;
         map = new HashMap<>();
 
         Language[] allLangs = Language.values();
         for (Language lang : allLangs) {
-            map.put(lang, new HashedKmer(lang, hashRange));
+            // skip Unidentified language (used in LanguageDistribution when the language isn't specified)
+            if (lang != Language.Unidentified) {
+                map.put(lang, new LanguageDistribution(lang, hashRange));
+            }
         }
     }
 
-    public Language findClosestLanguage(HashedKmer unknownKmer) {
-        // use frequency analysis
-        double[] unknownDist = unknownKmer.getDistribution();
+    public Language findClosestLanguage(LanguageDistribution unidentifiedLang) {
+        // use frequency analysis to find the language that matches the closest
+        double[] unidentifiedDist = unidentifiedLang.getDistribution();
         double lowestDist = Double.MAX_VALUE;
         Language bestFitLang = Language.Unidentified;
 
         Set<Language> keys = map.keySet();
         for (Language key : keys) {
-            HashedKmer ref = map.get(key);
+            LanguageDistribution ref = map.get(key);
             double[] refDist = ref.getDistribution();
-            double d = getDistance(unknownDist, refDist);
+            double d = getDistance(unidentifiedDist, refDist);
 
             if (d < lowestDist) {
                 lowestDist = d;
@@ -49,11 +52,11 @@ public class HashDatabase {
         return totalDist;
     }
 
-    public HashedKmer getHashedKmer(Language lang) {
+    public LanguageDistribution getDistribution(Language lang) {
         return map.get(lang);
     }
 
-    public void recordKmer(Language lang, short[] kmer) {
+    public void recordKmer(Language lang, char[] kmer) {
         map.get(lang).recordKmer(kmer);
     }
 }
