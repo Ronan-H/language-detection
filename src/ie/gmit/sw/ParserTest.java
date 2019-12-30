@@ -19,8 +19,8 @@ public class ParserTest {
         LanguageDistribution testDist = new HashedLanguageDistribution(512);
         testDist.recordSample(japanese, 3);
 
-        LanguageDetector languageDetector = new LanguageDetector(store);
-        Language closest = languageDetector.findClosestLanguage(testDist);
+        LanguageDetector languageDetector = LanguageDetectorFactory.getInstance().getSimpleLanguageDetector();
+        Language closest = languageDetector.findClosestLanguage(testDist, store);
         System.out.println("Closest lang: " + closest.name());
     }
 }
