@@ -4,19 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class LanguageDistributionDatabase {
-    private int hashRange;
+public class LanguageDistributionMap implements LanguageDistributionStore {
     private Map<Language, LanguageDistribution> map;
 
-    public LanguageDistributionDatabase(int hashRange) {
-        this.hashRange = hashRange;
+    public LanguageDistributionMap(int hashRange) {
         map = new HashMap<>();
 
         Language[] allLangs = Language.values();
         for (Language lang : allLangs) {
             // skip Unidentified language (used in LanguageDistribution when the language isn't specified)
             if (lang != Language.Unidentified) {
-                map.put(lang, new LanguageDistribution(lang, hashRange));
+                map.put(lang, new HashedLanguageDistribution(lang, hashRange));
             }
         }
     }
@@ -29,7 +27,7 @@ public class LanguageDistributionDatabase {
 
         Set<Language> keys = map.keySet();
         for (Language key : keys) {
-            LanguageDistribution ref = map.get(key);
+            LanguageDistribution ref = getDistribution(key);
             double[] refDist = ref.getDistribution();
             double d = getDistance(unidentifiedDist, refDist);
 
@@ -45,7 +43,7 @@ public class LanguageDistributionDatabase {
     private double getDistance(double[] dist1, double[] dist2) {
         double totalDist = 0;
 
-        for (int i = 0; i < hashRange; i++) {
+        for (int i = 0; i < dist1.length; i++) {
             totalDist += Math.abs(dist1[i] - dist2[i]);
         }
 
@@ -54,9 +52,5 @@ public class LanguageDistributionDatabase {
 
     public LanguageDistribution getDistribution(Language lang) {
         return map.get(lang);
-    }
-
-    public void recordKmer(Language lang, char[] kmer) {
-        map.get(lang).recordKmer(kmer);
     }
 }

@@ -3,7 +3,7 @@ package ie.gmit.sw;
 public class ParserTest {
     public static void main(String[] args) {
         System.out.println("Building subject db...");
-        LanguageDistributionDatabase db = db = new LanguageDistributionDatabase(512);
+        LanguageDistributionMap db = db = new LanguageDistributionMap(512);
         Parser parser = new Parser("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt", db);
         parser.parseFile();
         System.out.println("Finished. Evaluating test string...");
@@ -17,9 +17,9 @@ public class ParserTest {
         String latin = "Confíteor Deo omnipoténti, beátæMaríæ semper Vírgini, beáto MichaéliArchángelo, beáto Joánni Baptístæ,sanctis Apóstolis Petro et Paulo,ómnibus Sanctis, et vobis fratres: quiapeccávi nimis cogitatióne, verbo, etópere:  mea culpa, mea culpa, meamáxima culpa. Ídeo precor beátamMaríam semper Vírginem, beátumMichaélem Archángelum, beátumJoánnem Baptístam, sanctosApóstolos Petrum et Paulum, omnesSanctos, et vos fratres, oráre pro mead Dóminum Deum nostrum";
         String dutch  = "Een ieder heeft recht op onderwijs; het onderwijs zal kosteloos zijn, althans wat het lager en basisonderwijs betreft. Het lager onderwijs zal verplicht zijn. Ambachtsonderwijs en beroepsopleiding zullen algemeen beschikbaar worden gesteld. Hoger onderwijs zal openstaan voor een ieder, die daartoe de begaafdheid bezit.  Het onderwijs zal gericht zijn op de volle ontwikkeling van de menselijke persoonlijkheid en op de versterking van de eerbied voor de rechten van de mens en de fundamentele vrijheden. Het zal het begrip, de verdraagzaamheid en de vriendschap onder alle naties, rassen of godsdienstige groepen bevorderen en het zal de werkzaamheden van de Verenigde Naties voor de handhaving van de vrede steunen. Aan de ouders komt in de eerste plaats het recht toe om de soort van opvoeding en onderwijs te kiezen, welke aan hun kinderen zal worden gegeven.";
         String japanese = "明日は英語のテストだろう、だったら今晩は数学の宿題にかかずらわっちゃだめだ。";
-        LanguageDistribution languageDistribution = new LanguageDistribution(512);
-        languageDistribution.recordLine(japanese, 3);
-        Language closest = db.findClosestLanguage(languageDistribution);
+        HashedLanguageDistribution hashedLanguageDistribution = new HashedLanguageDistribution(512);
+        hashedLanguageDistribution.recordLine(japanese, 3);
+        Language closest = db.findClosestLanguage(hashedLanguageDistribution);
         System.out.println("Closest lang: " + closest.name());
     }
 }

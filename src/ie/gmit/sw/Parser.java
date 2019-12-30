@@ -4,9 +4,9 @@ import java.io.*;
 
 public class Parser {
     private String filePath;
-    private LanguageDistributionDatabase db;
+    private LanguageDistributionMap db;
 
-    public Parser(String filePath, LanguageDistributionDatabase db) {
+    public Parser(String filePath, LanguageDistributionMap db) {
         this.filePath = filePath;
         this.db = db;
     }
@@ -32,6 +32,6 @@ public class Parser {
 
     public void parseLine(String lang, String text, int k) {
         Language language = Language.valueOf(lang);
-        db.getDistribution(language).recordLine(text, k);
+        db.getDistribution(language).recordSample(text, k);
     }
 }
