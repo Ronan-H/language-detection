@@ -3,9 +3,12 @@ package ie.gmit.sw;
 public class ParserTest {
     public static void main(String[] args) {
         System.out.println("Building subject db...");
-        LanguageDistributionStore store = new LanguageDistributionMap(512);
-        SampleParser parser = new FileSampleParser("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt", store);
-        parser.parseAll();
+        LanguageDistributionStore store = new LanguageDistributionStoreBuilder()
+            .withMappedStore(512)
+            .registerParser(
+                new FileSampleParser("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt")
+            )
+        .build();
         System.out.println("Finished. Evaluating test string...");
 
         String english = "Java is a general-purpose programming language that is class-based, object-oriented, and designed to have as few implementation dependencies as possible. It is intended to let application developers write once, run anywhere, meaning that compiled Java code can run on all platforms that support Java without the need for recompilation.";
