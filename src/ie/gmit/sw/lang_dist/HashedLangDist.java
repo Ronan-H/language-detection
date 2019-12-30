@@ -1,17 +1,20 @@
-package ie.gmit.sw;
+package ie.gmit.sw.lang_dist;
 
-public class HashedLanguageDistribution extends LanguageDistribution {
+import ie.gmit.sw.Lang;
+import ie.gmit.sw.lang_dist.LangDist;
+
+public class HashedLangDist extends LangDist {
     private int hashRange;
     private int[] freqs;
 
-    public HashedLanguageDistribution(Language language, int hashRange) {
-        super(language);
+    public HashedLangDist(Lang lang, int hashRange) {
+        super(lang);
         this.hashRange = hashRange;
         freqs = new int[hashRange];
     }
 
-    public HashedLanguageDistribution(int keyRange) {
-        this(Language.Unidentified, keyRange);
+    public HashedLangDist(int keyRange) {
+        this(Lang.Unidentified, keyRange);
     }
 
     public void recordKmer(char[] kmer) {

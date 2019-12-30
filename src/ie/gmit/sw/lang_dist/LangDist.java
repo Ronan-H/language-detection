@@ -1,11 +1,13 @@
-package ie.gmit.sw;
+package ie.gmit.sw.lang_dist;
 
-public abstract class LanguageDistribution {
-    private Language language;
+import ie.gmit.sw.Lang;
+
+public abstract class LangDist {
+    private Lang lang;
     private int numRecords;
 
-    public LanguageDistribution(Language language) {
-        this.language = language;
+    public LangDist(Lang lang) {
+        this.lang = lang;
     }
 
     public abstract void recordKmer(char[] kmer);
@@ -26,8 +28,8 @@ public abstract class LanguageDistribution {
 
     public abstract double[] getDistribution();
 
-    public Language getLanguage() {
-        return language;
+    public Lang getLang() {
+        return lang;
     }
 
     public int getNumRecords() {

@@ -1,4 +1,6 @@
-package ie.gmit.sw;
+package ie.gmit.sw.sample_parser;
+
+import ie.gmit.sw.lang_dist.LangDistStore;
 
 import java.io.*;
 
@@ -10,7 +12,7 @@ public class FileSampleParser extends SampleParser {
     }
 
     @Override
-    public void parseAll(LanguageDistributionStore store) {
+    public void parseAll(LangDistStore store) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(filePath));
             String line;

@@ -1,6 +1,6 @@
 package ie.gmit.sw;
 
-public enum Language {
+public enum Lang {
 	Achinese ("Achinese"),
 	Afrikaans ("Afrikaans"),
 	Albanian ("Albanian"),
@@ -242,7 +242,7 @@ public enum Language {
 	
 	private final CharSequence language;
 
-    private Language(CharSequence language) {
+    private Lang(CharSequence language) {
         this.language = language;
     }
 	
