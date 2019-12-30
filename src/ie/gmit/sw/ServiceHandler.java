@@ -1,6 +1,14 @@
 package ie.gmit.sw;
 
+import ie.gmit.sw.lang_dist.LangDistStore;
+import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
+import ie.gmit.sw.sample_parser.FileSampleParser;
+
 import java.io.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -30,6 +38,10 @@ public class ServiceHandler extends HttpServlet {
 
 	private File f;
 
+	private LangDetectionWorker worker;
+	private BlockingQueue<LangDetectionJob> inQueue;
+	private ConcurrentMap<String, LangDetectionJob> outMap;
+
 	public void init() throws ServletException {
 		ServletContext ctx = getServletContext(); //Get a handle on the application context
 		languageDataSet = ctx.getInitParameter("LANGUAGE_DATA_SET"); //Reads the value from the <context-param> in web.xml
@@ -38,7 +50,19 @@ public class ServiceHandler extends HttpServlet {
 
 		f = new File(languageDataSet);
 
+		// build kmer distribution for all languages from language dataset
+		LangDistStore distStore = new LangDistStoreBuilder()
+			.withMappedStore(512)
+			.registerParser(
+				// TODO replace with languageDataSet file path
+				new FileSampleParser("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt")
+			)
+		.build();
 
+		inQueue = new ArrayBlockingQueue<LangDetectionJob>(50);
+		outMap = new ConcurrentHashMap<>();
+		worker = new LangDetectionWorker(distStore, inQueue, outMap);
+		new Thread(worker).start();
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,12 +79,22 @@ public class ServiceHandler extends HttpServlet {
 		out.print("</head>");
 		out.print("<body>");
 
-		if (taskNumber == null){
-			taskNumber = new String("T" + jobNumber);
-			jobNumber++;
+		if (taskNumber == null) {
+			taskNumber = "T" + jobNumber++;
 			//Add job to in-queue
-		}else{
+			LangDetectionJob nextJob =  new LangDetectionJob(taskNumber, s);
+			try {
+				inQueue.put(nextJob);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
 			//Check out-queue for finished job
+			if (outMap.containsKey(taskNumber)) {
+				LangDetectionJob finishedJob = outMap.get(taskNumber);
+				out.printf("<h2>Detected lang: %s</h2>", finishedJob.getResult().getLanguageName());
+			}
 		}
 
 
