@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentMap;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-
 /*
  * To compile this servlet, open a command prompt in the web application directory and execute the following commands:
  *
@@ -59,7 +58,7 @@ public class ServiceHandler extends HttpServlet {
 			)
 		.build();
 
-		inQueue = new ArrayBlockingQueue<LangDetectionJob>(50);
+		inQueue = new ArrayBlockingQueue<>(50);
 		outMap = new ConcurrentHashMap<>();
 		worker = new LangDetectionWorker(distStore, inQueue, outMap);
 		new Thread(worker).start();
@@ -69,19 +68,18 @@ public class ServiceHandler extends HttpServlet {
 		resp.setContentType("text/html"); //Output the MIME type
 		PrintWriter out = resp.getWriter(); //Write out text. We can write out binary too and change the MIME type...
 
-		//Initialise some request varuables with the submitted form info. These are local to this method and thread safe...
+		//Initialise some request variables with the submitted form info. These are local to this method and thread safe...
 		String option = req.getParameter("cmbOptions"); //Change options to whatever you think adds value to your assignment...
 		String s = req.getParameter("query");
 		String taskNumber = req.getParameter("frmTaskNumber");
-
 
 		out.print("<html><head><title>Advanced Object Oriented Software Development Assignment</title>");
 		out.print("</head>");
 		out.print("<body>");
 
 		if (taskNumber == null) {
-			taskNumber = "T" + jobNumber++;
-			//Add job to in-queue
+			taskNumber = String.format("T%d", jobNumber++);
+
 			LangDetectionJob nextJob =  new LangDetectionJob(taskNumber, s);
 			try {
 				inQueue.put(nextJob);
@@ -89,15 +87,16 @@ public class ServiceHandler extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		else {
-			//Check out-queue for finished job
-			if (outMap.containsKey(taskNumber)) {
-				LangDetectionJob finishedJob = outMap.get(taskNumber);
-				out.printf("<h2>Detected lang: %s</h2>", finishedJob.getResult().getLanguageName());
-			}
+
+		if (outMap.containsKey(taskNumber)) {
+			LangDetectionJob finishedJob = outMap.get(taskNumber);
+			out.printf("<h2>Detected lang: %s</h2>", finishedJob.getResult().getLanguageName());
 		}
-
-
+		else {
+			out.print("<script>");
+			out.print("var wait=setTimeout(\"document.frmRequestDetails.submit();\", 5000);");
+			out.print("</script>");
+		}
 
 		out.print("<H1>Processing request for Job#: " + taskNumber + "</H1>");
 		out.print("<div id=\"r\"></div>");
@@ -117,7 +116,7 @@ public class ServiceHandler extends HttpServlet {
 		out.print("<LI>Generate a big random number to use a a job number, or just increment a static long variable declared at a class level, e.g. jobNumber.");
 		out.print("<LI>Create some type of an object from the request variables and jobNumber.");
 		out.print("<LI>Add the message request object to a LinkedList or BlockingQueue (the IN-queue)");
-		out.print("<LI>Return the jobNumber to the client web browser with a wait interval using <meta http-equiv=\"refresh\" content=\"10\">. The content=\"10\" will wait for 10s.");
+		//out.print("<LI>Return the jobNumber to the client web browser with a wait interval using <meta http-equiv=\"refresh\" content=\"10\">. The content=\"10\" will wait for 10s.");
 		out.print("<LI>Have some process check the LinkedList or BlockingQueue for message requests.");
 		out.print("<LI>Poll a message request from the front of the queue and pass the task to the language detection service.");
 		out.print("<LI>Add the jobNumber as a key in a Map (the OUT-queue) and an initial value of null.");
@@ -131,12 +130,6 @@ public class ServiceHandler extends HttpServlet {
 		out.print("</form>");
 		out.print("</body>");
 		out.print("</html>");
-
-		out.print("<script>");
-		out.print("var wait=setTimeout(\"document.frmRequestDetails.submit();\", 10000);");
-		out.print("</script>");
-
-
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -28,7 +28,8 @@ public class LangDetectionJob {
 
     @Override
     public boolean equals(Object otherObj) {
-        if (otherObj == null || !(otherObj instanceof LangDetectionJob)) {
+        // (this covers otherObj == null)
+        if (!(otherObj instanceof LangDetectionJob)) {
             return false;
         }
 
