@@ -15,8 +15,8 @@
 					<b>Select Option:</b>
 						
 					<select name="cmbOptions">
-						<option>Option 1</option>
-						<option selected>Option 2</option>
+						<option selected>Option 1</option>
+						<option>Option 2</option>
 						<option>Option 3</option>
 					</select>	
 					<p/>

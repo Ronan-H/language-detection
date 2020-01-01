@@ -37,9 +37,7 @@ public class ServiceHandler extends HttpServlet {
 
 	private File f;
 
-	private LangDetectionWorker worker;
-	private BlockingQueue<LangDetectionJob> inQueue;
-	private ConcurrentMap<String, LangDetectionJob> outMap;
+	private LangDetectionSystem langDetectionSystem;
 
 	public void init() throws ServletException {
 		ServletContext ctx = getServletContext(); //Get a handle on the application context
@@ -49,22 +47,11 @@ public class ServiceHandler extends HttpServlet {
 
 		f = new File(languageDataSet);
 
-		// build kmer distribution for all languages from language dataset
-		LangDistStore distStore = new LangDistStoreBuilder()
-			.withMappedStore(512)
-			.registerParser(
-				// TODO replace with languageDataSet file path
-				new FileSampleParser("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt")
-			)
-		.build();
-
-		inQueue = new ArrayBlockingQueue<>(50);
-		outMap = new ConcurrentHashMap<>();
-		worker = new LangDetectionWorker(distStore, inQueue, outMap);
-		new Thread(worker).start();
+		langDetectionSystem = LangDetectionSystemFactory.getInstance().getStandardLangDetectionSystem();
+		langDetectionSystem.go();
 	}
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setContentType("text/html"); //Output the MIME type
 		PrintWriter out = resp.getWriter(); //Write out text. We can write out binary too and change the MIME type...
 
@@ -79,18 +66,11 @@ public class ServiceHandler extends HttpServlet {
 
 		if (taskNumber == null) {
 			taskNumber = String.format("T%d", jobNumber++);
-
-			LangDetectionJob nextJob =  new LangDetectionJob(taskNumber, s);
-			try {
-				inQueue.put(nextJob);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			langDetectionSystem.submitJob(taskNumber, s);
 		}
 
-		if (outMap.containsKey(taskNumber)) {
-			LangDetectionJob finishedJob = outMap.get(taskNumber);
-			out.printf("<h2>Detected lang: %s</h2>", finishedJob.getResult().getLanguageName());
+		if (langDetectionSystem.isJobFinished(taskNumber)) {
+			out.printf("<h2>Detected lang: %s</h2>", langDetectionSystem.getLanguageResult(taskNumber));
 		}
 		else {
 			out.print("<script>");
@@ -132,7 +112,7 @@ public class ServiceHandler extends HttpServlet {
 		out.print("</html>");
 	}
 
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		doGet(req, resp);
  	}
 }
