@@ -1,4 +1,6 @@
-package ie.gmit.sw;
+package ie.gmit.sw.lang_detector_system;
+
+import ie.gmit.sw.Lang;
 
 public class LangDetectionJob {
     private String id;

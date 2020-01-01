@@ -1,4 +1,4 @@
-package ie.gmit.sw;
+package ie.gmit.sw.lang_detector_system;
 
 import ie.gmit.sw.lang_dist.LangDistStore;
 
@@ -8,22 +8,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class LangDetectionSystem {
-    private LangDetectionWorker worker;
+    private LangDetectionWorker[] workers;
     private BlockingQueue<LangDetectionJob> inQueue;
     private ConcurrentMap<String, LangDetectionJob> outMap;
 
-    public LangDetectionSystem(LangDistStore distStore, int inQueueCap) {
+    public LangDetectionSystem(LangDistStore distStore, int inQueueCap, int numWorkers) {
         inQueue = new ArrayBlockingQueue<>(inQueueCap);
         outMap = new ConcurrentHashMap<>();
-        worker = new LangDetectionWorker(distStore, inQueue, outMap);
+        workers = new LangDetectionWorker[numWorkers];
+
+        for (int i = 0; i < workers.length; i++) {
+            workers[i] = new LangDetectionWorker(distStore, inQueue, outMap);
+        }
     }
 
     public void go() {
-        new Thread(worker).start();
+        for (int i = 0; i < workers.length; i++) {
+            new Thread(workers[i]).start();
+        }
     }
 
     public void stop() {
-        worker.stop();
+        for (int i = 0; i < workers.length; i++) {
+            workers[i].stop();
+        }
     }
 
     public void submitJob(String id, String sampleText) {

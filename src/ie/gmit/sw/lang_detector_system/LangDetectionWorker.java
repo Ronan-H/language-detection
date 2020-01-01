@@ -1,5 +1,6 @@
-package ie.gmit.sw;
+package ie.gmit.sw.lang_detector_system;
 
+import ie.gmit.sw.Lang;
 import ie.gmit.sw.lang_detector.LangDetector;
 import ie.gmit.sw.lang_detector.LangDetectorFactory;
 import ie.gmit.sw.lang_dist.HashedLangDist;
@@ -24,6 +25,8 @@ public class LangDetectionWorker implements Runnable {
     @Override
     public void run() {
         running = true;
+
+        LangDetector langDetector = LangDetectorFactory.getInstance().getSimpleLanguageDetector();
         while (running) {
             try {
                 LangDetectionJob currentJob = inQueue.take();
@@ -31,7 +34,6 @@ public class LangDetectionWorker implements Runnable {
                 LangDist testDist = new HashedLangDist(512);
                 testDist.recordSample(currentJob.getSampleText(), 3);
 
-                LangDetector langDetector = LangDetectorFactory.getInstance().getSimpleLanguageDetector();
                 Lang closest = langDetector.findClosestLanguage(testDist, distStore);
                 currentJob.setResult(closest);
 

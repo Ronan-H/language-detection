@@ -1,14 +1,9 @@
 package ie.gmit.sw;
 
-import ie.gmit.sw.lang_dist.LangDistStore;
-import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
-import ie.gmit.sw.sample_parser.FileSampleParser;
+import ie.gmit.sw.lang_detector_system.LangDetectionSystem;
+import ie.gmit.sw.lang_detector_system.LangDetectionSystemFactory;
 
 import java.io.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import javax.servlet.*;
 import javax.servlet.http.*;
 

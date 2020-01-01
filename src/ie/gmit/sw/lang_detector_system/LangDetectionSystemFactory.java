@@ -1,6 +1,5 @@
-package ie.gmit.sw;
+package ie.gmit.sw.lang_detector_system;
 
-import ie.gmit.sw.lang_detector.LangDetector;
 import ie.gmit.sw.lang_dist.LangDistStore;
 import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
 import ie.gmit.sw.sample_parser.FileSampleParser;
@@ -28,6 +27,6 @@ public class LangDetectionSystemFactory {
             )
         .build();
 
-        return new LangDetectionSystem(distStore, 50);
+        return new LangDetectionSystem(distStore, 50, 4);
     }
 }
