@@ -2,6 +2,9 @@ package ie.gmit.sw.lang_detector_system;
 
 import ie.gmit.sw.Lang;
 
+/**
+ * A simple class representing a language detection job.
+ */
 public class LangDetectionJob {
     private String id;
     private String sampleText;
@@ -12,14 +15,23 @@ public class LangDetectionJob {
         this.sampleText = sampleText;
     }
 
+    /**
+     * Job ID
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sample text (query text entered by the user)
+     */
     public String getSampleText() {
         return sampleText;
     }
 
+    /**
+     * Detected language (null until set externally)
+     */
     public Lang getResult() {
         return result;
     }
@@ -28,6 +40,9 @@ public class LangDetectionJob {
         this.result = result;
     }
 
+    /**
+     * Compares jobs based on job ID
+     */
     @Override
     public boolean equals(Object otherObj) {
         // (this covers otherObj == null)

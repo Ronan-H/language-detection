@@ -9,6 +9,10 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Language detection worker capable of running asynchronously on a different thread.
+ * Continuously takes jobs off of a queue and processes them before adding the result to a result map.
+ */
 public class LangDetectionWorker implements Runnable {
     private LangDistStore distStore;
     private BlockingQueue<LangDetectionJob> inQueue;
@@ -16,6 +20,14 @@ public class LangDetectionWorker implements Runnable {
     private LangDetector langDetector;
     private boolean running;
 
+    /**
+     * Creates a new worker using pre-existing shared objects.
+     *
+     * @param distStore Store of language distribution frequencies
+     * @param inQueue Job input queue (blocking)
+     * @param outMap Language detection result map
+     * @param langDetector Language detector to use (contains an underlying strategy for detecting languages)
+     */
     public LangDetectionWorker(LangDistStore distStore, BlockingQueue<LangDetectionJob> inQueue, ConcurrentMap<String, LangDetectionJob> outMap, LangDetector langDetector) {
         this.distStore = distStore;
         this.inQueue = inQueue;
@@ -23,6 +35,9 @@ public class LangDetectionWorker implements Runnable {
         this.langDetector = langDetector;
     }
 
+    /**
+     * Continuously takes jobs off of a queue and processes them before adding the result to a result map.
+     */
     @Override
     public void run() {
         running = true;
@@ -44,6 +59,9 @@ public class LangDetectionWorker implements Runnable {
         }
     }
 
+    /**
+     * Stop thread (may not stop immediately)
+     */
     public void stop() {
         running = false;
     }

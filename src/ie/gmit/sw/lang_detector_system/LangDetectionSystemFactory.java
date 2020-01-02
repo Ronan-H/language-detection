@@ -4,6 +4,10 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
 import ie.gmit.sw.sample_parser.FileSampleParser;
 
+/**
+ * Responsible for creating language detection systems. These have a lot of different parameters
+ * and steps for building them, so it's useful to have this hidden away from the programmer.
+ */
 public class LangDetectionSystemFactory {
     private static LangDetectionSystemFactory instance;
 
@@ -17,6 +21,10 @@ public class LangDetectionSystemFactory {
         return instance;
     }
 
+    /**
+     * Builds a standard language detection system with using appropriate parameters. Relies on the existence of
+     * a data set file of language samples at a specific path.
+     */
     public LangDetectionSystem getStandardLangDetectionSystem() {
         // build kmer distribution for all languages from language dataset
         LangDistStore distStore = new LangDistStoreBuilder()
