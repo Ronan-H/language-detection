@@ -1,5 +1,8 @@
 package ie.gmit.sw.lang_detector;
 
+/**
+ * Responsible for creating different types of LangDetector. Hides the complexity of creating these objects.
+ */
 public class LangDetectorFactory {
     private static LangDetectorFactory instance;
 

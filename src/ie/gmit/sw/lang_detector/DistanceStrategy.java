@@ -6,6 +6,10 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 
 import java.util.Set;
 
+/**
+ * A simple strategy for detecting an unknown language: finds the language in a LangDistStore which has
+ * the smallest total difference for each k-mer frequency value.
+ */
 public class DistanceStrategy implements LangDetectorStrategy {
 
     public Lang findClosestLanguage(LangDist unidentifiedLang, LangDistStore store) {
