@@ -31,7 +31,7 @@ public class TestLangDetector {
         LangDist testDist = new HashedLangDist(512);
         testDist.recordSample(dutch, 3);
 
-        LangDetector langDetector = LangDetectorFactory.getInstance().getSimpleLanguageDetector();
+        LangDetector langDetector = LangDetectorFactory.getInstance().getSmallestDistanceLanguageDetector();
         Lang closest = langDetector.findClosestLanguage(testDist, store);
         System.out.println("Closest lang: " + closest.name());
     }

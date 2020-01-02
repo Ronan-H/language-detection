@@ -1,2 +1,0 @@
-- move language detection code out of servlet (into a facade?)
-- implement out of place metric?

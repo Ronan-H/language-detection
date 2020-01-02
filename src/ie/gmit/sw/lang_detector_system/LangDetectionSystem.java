@@ -1,5 +1,6 @@
 package ie.gmit.sw.lang_detector_system;
 
+import ie.gmit.sw.lang_detector.LangDetectorFactory;
 import ie.gmit.sw.lang_dist.LangDistStore;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -18,7 +19,7 @@ public class LangDetectionSystem {
         workers = new LangDetectionWorker[numWorkers];
 
         for (int i = 0; i < workers.length; i++) {
-            workers[i] = new LangDetectionWorker(distStore, inQueue, outMap);
+            workers[i] = new LangDetectionWorker(distStore, inQueue, outMap, LangDetectorFactory.getInstance().getOutOfPlaceLanguageDetector());
         }
     }
 

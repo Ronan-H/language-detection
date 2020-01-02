@@ -2,7 +2,6 @@ package ie.gmit.sw.lang_detector_system;
 
 import ie.gmit.sw.Lang;
 import ie.gmit.sw.lang_detector.LangDetector;
-import ie.gmit.sw.lang_detector.LangDetectorFactory;
 import ie.gmit.sw.lang_dist.HashedLangDist;
 import ie.gmit.sw.lang_dist.LangDist;
 import ie.gmit.sw.lang_dist.LangDistStore;
@@ -14,19 +13,20 @@ public class LangDetectionWorker implements Runnable {
     private LangDistStore distStore;
     private BlockingQueue<LangDetectionJob> inQueue;
     private ConcurrentMap<String, LangDetectionJob> outMap;
+    private LangDetector langDetector;
     private boolean running;
 
-    public LangDetectionWorker(LangDistStore distStore, BlockingQueue<LangDetectionJob> inQueue, ConcurrentMap<String, LangDetectionJob> outMap) {
+    public LangDetectionWorker(LangDistStore distStore, BlockingQueue<LangDetectionJob> inQueue, ConcurrentMap<String, LangDetectionJob> outMap, LangDetector langDetector) {
         this.distStore = distStore;
         this.inQueue = inQueue;
         this.outMap = outMap;
+        this.langDetector = langDetector;
     }
 
     @Override
     public void run() {
         running = true;
 
-        LangDetector langDetector = LangDetectorFactory.getInstance().getSimpleLanguageDetector();
         while (running) {
             try {
                 LangDetectionJob currentJob = inQueue.take();

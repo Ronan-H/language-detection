@@ -13,7 +13,11 @@ public class LangDetectorFactory {
         return instance;
     }
 
-    public LangDetector getSimpleLanguageDetector() {
-        return new LangDetector(new SimpleLangDetectorStrategy());
+    public LangDetector getOutOfPlaceLanguageDetector() {
+        return new LangDetector(new OutOfPlaceStrategy());
+    }
+
+    public LangDetector getSmallestDistanceLanguageDetector() {
+        return new LangDetector(new DistanceStrategy());
     }
 }

@@ -6,7 +6,7 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 
 import java.util.Set;
 
-public class SimpleLangDetectorStrategy implements LangDetectorStrategy {
+public class DistanceStrategy implements LangDetectorStrategy {
 
     public Lang findClosestLanguage(LangDist unidentifiedLang, LangDistStore store) {
         // use frequency analysis to find the language that matches the closest
