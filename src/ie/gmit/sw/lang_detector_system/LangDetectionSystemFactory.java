@@ -24,6 +24,8 @@ public class LangDetectionSystemFactory {
     /**
      * Builds a standard language detection system with using appropriate parameters. Relies on the existence of
      * a data set file of language samples at a specific path.
+     *
+     * @return Created language detection system.
      */
     public LangDetectionSystem getStandardLangDetectionSystem() {
         // build kmer distribution for all languages from language dataset

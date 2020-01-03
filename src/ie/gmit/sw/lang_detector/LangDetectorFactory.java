@@ -16,10 +16,21 @@ public class LangDetectorFactory {
         return instance;
     }
 
+    /**
+     * Creates a language detector that uses the out-of-place metric for comparing language distributions.
+     *
+     * @return Created language detector.
+     */
     public LangDetector getOutOfPlaceLanguageDetector() {
         return new LangDetector(new OutOfPlaceStrategy());
     }
 
+    /**
+     * Creates a language detector that compares language distributions based on the total distance between all
+     * k-mer frequency values.
+     *
+     * @return Created language detector.
+     */
     public LangDetector getSmallestDistanceLanguageDetector() {
         return new LangDetector(new DistanceStrategy());
     }

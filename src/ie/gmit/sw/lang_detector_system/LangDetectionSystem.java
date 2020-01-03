@@ -83,6 +83,6 @@ public class LangDetectionSystem {
      * @return Name of detected language
      */
     public String getLanguageResult(String id) {
-        return outMap.get(id).getResult().name();
+        return outMap.get(id).getResult().getLanguageName();
     }
 }

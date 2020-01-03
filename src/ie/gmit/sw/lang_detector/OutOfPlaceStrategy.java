@@ -15,8 +15,8 @@ public class OutOfPlaceStrategy implements LangDetectorStrategy {
      */
     public Lang findClosestLanguage(LangDist unidentifiedLang, LangDistStore store) {
         System.out.println("-- Distribution --");
-        for (int i = 0; i < unidentifiedLang.getDistribution().length; i++) {
-            System.out.println(i + ": " + unidentifiedLang.getDistribution()[i]);
+        for (int i = 0; i < unidentifiedLang.getFrequencies().length; i++) {
+            System.out.println(i + ": " + unidentifiedLang.getFrequencies()[i]);
         }
 
         Integer[] unidentifiedRanking = getLangRanking(unidentifiedLang);
@@ -54,9 +54,12 @@ public class OutOfPlaceStrategy implements LangDetectorStrategy {
      * 0: 2
      * 1: 0
      * 2: 1
+     *
+     * @param langDist K-mer language distribution.
+     * @return Index ranking.
      */
     private Integer[] getLangRanking(LangDist langDist) {
-        Double[] dist = Arrays.stream(langDist.getDistribution())
+        Double[] dist = Arrays.stream(langDist.getFrequencies())
                 .boxed()
                 .toArray(Double[]::new);
         DoubleArrayIndexComparator comparator = new DoubleArrayIndexComparator(dist);
@@ -69,6 +72,9 @@ public class OutOfPlaceStrategy implements LangDetectorStrategy {
     /**
      * Inverts an Integer array so that indices and values are swapped.
      * (used as part of converting an array of k-mer frequencies to their corresponding ranking)
+     *
+     * @param arr Integer array to invert.
+     * @return Inverted integer array.
      */
     private Integer[] swapIndicesForValues(Integer[] arr) {
         Integer[] swapped = new Integer[arr.length];
@@ -117,6 +123,8 @@ class DoubleArrayIndexComparator implements Comparator<Integer> {
 
     /**
      * Generate an array of indexes (where index = value)
+     *
+     * @return Array of indexes.
      */
     public Integer[] getIndexArray() {
         Integer[] indexes = new Integer[array.length];
@@ -130,6 +138,9 @@ class DoubleArrayIndexComparator implements Comparator<Integer> {
 
     /**
      * Compares two Integer indexes, based on the underlying array of Double values.
+     *
+     * @param index1 First index of the array to compare.
+     * @param index2 Second index of the array to compare.
      */
     @Override
     public int compare(Integer index1, Integer index2) {

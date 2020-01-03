@@ -12,7 +12,8 @@ public abstract class LangDist {
 
     /**
      * Create a language distribution for a specified language.
-     * @param lang Language of this distribution
+     *
+     * @param lang Language of this distribution.
      */
     public LangDist(Lang lang) {
         this.lang = lang;
@@ -26,8 +27,8 @@ public abstract class LangDist {
     /**
      * Split a language sample line into k-mers and record each k-mer
      *
-     * @param line language sample line
-     * @param k size of k-mer
+     * @param line Language sample line.
+     * @param k Size of k-mer.
      */
     public void recordSample(String line, int k) {
         char[] sample = line.toCharArray();
@@ -46,9 +47,10 @@ public abstract class LangDist {
     /**
      * Generate a k-mer distribution, where each k-mer is given a frequency value
      * between 0 and 1.
-     * @return
+     *
+     * @return Array of K-mer frequencies.
      */
-    public abstract double[] getDistribution();
+    public abstract double[] getFrequencies();
 
     public Lang getLang() {
         return lang;

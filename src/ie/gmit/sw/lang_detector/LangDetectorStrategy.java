@@ -7,6 +7,10 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 public interface LangDetectorStrategy {
     /**
      * Find the closest language based on a k-mer distribution and a LangDistStore.
+     *
+     * @param unidentifiedLang K-mer distribution of unidentified language sample.
+     * @param store Store of known language k-mer distributions.
+     * @return Closest known language to the unknown language distribution, based on this strategy.
      */
     Lang findClosestLanguage(LangDist unidentifiedLang, LangDistStore store);
 }

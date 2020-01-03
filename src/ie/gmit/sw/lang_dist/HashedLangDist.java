@@ -36,8 +36,10 @@ public class HashedLangDist extends LangDist {
     }
 
     /**
-     * TODO continue javadoccing here
-     * @param kmer
+     * Records a single k-mer to this language distribution, by hashing the k-mer in order
+     * to record it into an array instead of a map.
+     *
+     * @param kmer k-mer to record one usage of
      */
     public void recordKmer(char[] kmer) {
         // hash implementation based on String.hashcode()
@@ -53,7 +55,15 @@ public class HashedLangDist extends LangDist {
         freqs[kmer[0] % hashRange]++;
     }
 
-    public double[] getDistribution() {
+    /**
+     * Generates a double array of frequency values for this distribution, where each double represents
+     * a frequency value between 0 and 1, where 0 means no occurances and 1 means all k-mers were at this
+     * index.
+     *
+     * @return frequency values
+     */
+    @Override
+    public double[] getFrequencies() {
         double[] dist = new double[hashRange];
 
         for (int i = 0; i < hashRange; i++) {
@@ -61,11 +71,5 @@ public class HashedLangDist extends LangDist {
         }
 
         return dist;
-    }
-
-    public void printFreq() {
-        for (int i = 0; i < hashRange; i++) {
-            System.out.println(i + ": " + freqs[i]);
-        }
     }
 }

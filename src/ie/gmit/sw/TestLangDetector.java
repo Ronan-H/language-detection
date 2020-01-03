@@ -33,6 +33,6 @@ public class TestLangDetector {
 
         LangDetector langDetector = LangDetectorFactory.getInstance().getSmallestDistanceLanguageDetector();
         Lang closest = langDetector.findClosestLanguage(testDist, store);
-        System.out.println("Closest lang: " + closest.name());
+        System.out.println("Closest lang: " + closest.getLanguageName());
     }
 }

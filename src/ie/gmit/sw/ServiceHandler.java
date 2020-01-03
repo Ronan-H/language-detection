@@ -26,6 +26,9 @@ import javax.servlet.http.*;
  *
 */
 
+/**
+ * Servlet for the asynchronous language detection system.
+ */
 public class ServiceHandler extends HttpServlet {
 	private String languageDataSet = null; //This variable is shared by all HTTP requests for the servlet
 	private static long jobNumber = 0; //The number of the task in the async queue
@@ -34,7 +37,10 @@ public class ServiceHandler extends HttpServlet {
 
 	private LangDetectionSystem langDetectionSystem;
 
-	public void init() throws ServletException {
+	/**
+	 * Initialises servlet and language detection system.
+	 */
+	public void init() {
 		ServletContext ctx = getServletContext(); //Get a handle on the application context
 		languageDataSet = ctx.getInitParameter("LANGUAGE_DATA_SET"); //Reads the value from the <context-param> in web.xml
 
@@ -46,6 +52,10 @@ public class ServiceHandler extends HttpServlet {
 		langDetectionSystem.go();
 	}
 
+	/**
+	 * Responds to GET on this servlet by queueing, processing, and displaying the result of a language
+	 * detection job.
+	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setContentType("text/html"); //Output the MIME type
 		PrintWriter out = resp.getWriter(); //Write out text. We can write out binary too and change the MIME type...
@@ -86,18 +96,6 @@ public class ServiceHandler extends HttpServlet {
 		out.print("Note that any variables declared inside this doGet() method are thread safe. Anything defined at a class level is shared between HTTP requests.");
 		out.print("</b></font>");
 
-		out.print("<P> Next Steps:");
-		out.print("<OL>");
-		out.print("<LI>Generate a big random number to use a a job number, or just increment a static long variable declared at a class level, e.g. jobNumber.");
-		out.print("<LI>Create some type of an object from the request variables and jobNumber.");
-		out.print("<LI>Add the message request object to a LinkedList or BlockingQueue (the IN-queue)");
-		//out.print("<LI>Return the jobNumber to the client web browser with a wait interval using <meta http-equiv=\"refresh\" content=\"10\">. The content=\"10\" will wait for 10s.");
-		out.print("<LI>Have some process check the LinkedList or BlockingQueue for message requests.");
-		out.print("<LI>Poll a message request from the front of the queue and pass the task to the language detection service.");
-		out.print("<LI>Add the jobNumber as a key in a Map (the OUT-queue) and an initial value of null.");
-		out.print("<LI>Return the result of the language detection system to the client next time a request for the jobNumber is received and the task has been complete (value is not null).");
-		out.print("</OL>");
-
 		out.print("<form method=\"POST\" name=\"frmRequestDetails\">");
 		out.print("<input name=\"cmbOptions\" type=\"hidden\" value=\"" + option + "\">");
 		out.print("<input name=\"query\" type=\"hidden\" value=\"" + s + "\">");
@@ -107,6 +105,10 @@ public class ServiceHandler extends HttpServlet {
 		out.print("</html>");
 	}
 
+	/**
+	 * Responds to a POST request on this servlet. Passes the request and response on to
+	 * the GET method handler.
+	 */
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		doGet(req, resp);
  	}

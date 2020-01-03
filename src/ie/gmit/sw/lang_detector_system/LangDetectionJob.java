@@ -42,6 +42,9 @@ public class LangDetectionJob {
 
     /**
      * Compares jobs based on job ID
+     *
+     * @param otherObj LangDetectionJob to compare to.
+     * @return True if their IDs match.
      */
     @Override
     public boolean equals(Object otherObj) {
