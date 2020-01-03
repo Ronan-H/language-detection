@@ -35,6 +35,7 @@ public abstract class LangDist {
         char[] kmer = new char[k];
 
         for (int i = 0; i <= sample.length - k; i++) {
+            // build k-mer array
             for (int j = 0; j < k; j++) {
                 kmer[j] = sample[i + j];
             }

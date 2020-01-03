@@ -68,6 +68,13 @@ public class ServiceHandler extends HttpServlet {
 		out.print("<html><head><title>Advanced Object Oriented Software Development Assignment</title>");
 		out.print("</head>");
 		out.print("<body>");
+		out.print("<div id=\"r\"></div>");
+
+		out.print("<font color=\"#993333\"><b>");
+		out.print("Language Dataset is located at " + languageDataSet + " and is <b><u>" + f.length() + "</u></b> bytes in size");
+		out.print("<br>Option(s): " + option);
+		out.print("<br>Query Text : " + s);
+		out.print("</font></b><br>");
 
 		if (taskNumber == null) {
 			taskNumber = String.format("T%d", jobNumber++);
@@ -75,26 +82,15 @@ public class ServiceHandler extends HttpServlet {
 		}
 
 		if (langDetectionSystem.isJobFinished(taskNumber)) {
-			out.printf("<h2>Detected lang: %s</h2>", langDetectionSystem.getLanguageResult(taskNumber));
+			out.printf("<h2>STATUS: Job %s complete</h2>", taskNumber);
+			out.printf("<h2>Detected language: <font color=\"#00ab00\">%s</font></h2>", langDetectionSystem.getLanguageResult(taskNumber));
 		}
 		else {
+			out.printf("<h2>STATUS: Processing request for Job#: %s, please wait...</h2>", taskNumber);
 			out.print("<script>");
 			out.print("var wait=setTimeout(\"document.frmRequestDetails.submit();\", 5000);");
 			out.print("</script>");
 		}
-
-		out.print("<H1>Processing request for Job#: " + taskNumber + "</H1>");
-		out.print("<div id=\"r\"></div>");
-
-		out.print("<font color=\"#993333\"><b>");
-		out.print("Language Dataset is located at " + languageDataSet + " and is <b><u>" + f.length() + "</u></b> bytes in size");
-		out.print("<br>Option(s): " + option);
-		out.print("<br>Query Text : " + s);
-		out.print("</font><p/>");
-
-		out.print("<br>This servlet should only be responsible for handling client request and returning responses. Everything else should be handled by different objects. ");
-		out.print("Note that any variables declared inside this doGet() method are thread safe. Anything defined at a class level is shared between HTTP requests.");
-		out.print("</b></font>");
 
 		out.print("<form method=\"POST\" name=\"frmRequestDetails\">");
 		out.print("<input name=\"cmbOptions\" type=\"hidden\" value=\"" + option + "\">");

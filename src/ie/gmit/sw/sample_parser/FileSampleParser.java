@@ -32,7 +32,10 @@ public class FileSampleParser extends SampleParser {
             BufferedReader in = new BufferedReader(new FileReader(filePath));
             String line;
 
+            // read file line by line
             while ((line = in.readLine()) != null) {
+                // split language sample and name
+                // TODO regex remove things like symbols, numbers, etc
                 String[] parts = line.trim().split("@");
                 if (parts.length == 2) {
                     parseSample(parts[1], parts[0], 3, store);

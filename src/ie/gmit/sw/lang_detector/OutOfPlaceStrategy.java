@@ -13,18 +13,9 @@ public class OutOfPlaceStrategy implements LangDetectorStrategy {
     /**
      * Finds the closest language to an unknown language, using the "out-of-place" metric.
      */
+    @Override
     public Lang findClosestLanguage(LangDist unidentifiedLang, LangDistStore store) {
-        System.out.println("-- Distribution --");
-        for (int i = 0; i < unidentifiedLang.getFrequencies().length; i++) {
-            System.out.println(i + ": " + unidentifiedLang.getFrequencies()[i]);
-        }
-
         Integer[] unidentifiedRanking = getLangRanking(unidentifiedLang);
-
-        System.out.println("-- Unidentified ranking --");
-        for (int i = 0; i < unidentifiedRanking.length; i++) {
-            System.out.println(i + ": " + unidentifiedRanking[i]);
-        }
 
         double smallestOopm = Double.MAX_VALUE;
         Lang closestLang = Lang.Unidentified;
@@ -32,6 +23,7 @@ public class OutOfPlaceStrategy implements LangDetectorStrategy {
         for (Lang key : keys) {
             Integer[] refRanking = getLangRanking(store.getDistribution(key));
             double oopm = getOutOfPlaceMetric(unidentifiedRanking, refRanking, 100);
+
             if (oopm < smallestOopm) {
                 closestLang = key;
                 smallestOopm = oopm;
@@ -59,14 +51,17 @@ public class OutOfPlaceStrategy implements LangDetectorStrategy {
      * @return Index ranking.
      */
     private Integer[] getLangRanking(LangDist langDist) {
+        // covert double[] array to Double[]
         Double[] dist = Arrays.stream(langDist.getFrequencies())
                 .boxed()
                 .toArray(Double[]::new);
+
+        // sort distribution frequencies by index
         DoubleArrayIndexComparator comparator = new DoubleArrayIndexComparator(dist);
         Integer[] indices = comparator.getIndexArray();
         Arrays.sort(indices, comparator);
-        Integer[] ranking = swapIndicesForValues(indices);
-        return ranking;
+        // invert index array's indexes and values (creating a "map" from k-mer to rank)
+        return swapIndicesForValues(indices);
     }
 
     /**
@@ -89,14 +84,20 @@ public class OutOfPlaceStrategy implements LangDetectorStrategy {
     /**
      * Calculates the out-of-place metric for two arrays of k-mer ranks.
      *
-     * @param limit Excludes past this limit (if both lang A AND lang B's k-mer rank are below this)
+     * @param langARanking K-mer ranking for language A.
+     * @param langBRanking K-mer ranking for language B.
+     * @param limit Excludes past this limit (if both lang A AND lang B's k-mer rank are below this).
+     * @return Out-of-place metric (smaller = closer language distributions).
      */
     private double getOutOfPlaceMetric(Integer[] langARanking, Integer[] langBRanking, int limit) {
         double totalDistance = 0;
 
         for (int i = 0; i < langARanking.length; i++) {
+            // get language ranks for this k-mer
             int aRank = langARanking[i];
             int bRank = langBRanking[i];
+
+            // ignore k-mer if it is not significant for either of these languages
             if (aRank <= limit || bRank <= limit) {
                 totalDistance += Math.abs(aRank - bRank);
             }
@@ -141,6 +142,7 @@ class DoubleArrayIndexComparator implements Comparator<Integer> {
      *
      * @param index1 First index of the array to compare.
      * @param index2 Second index of the array to compare.
+     * @return int representing ordering (inverted so that the indexes get sorted in descending order).
      */
     @Override
     public int compare(Integer index1, Integer index2) {

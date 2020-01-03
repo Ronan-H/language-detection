@@ -44,14 +44,22 @@ public class LangDetectionWorker implements Runnable {
 
         while (running) {
             try {
+                // take job from in-queue (blocking)
+                // (there may be multiple workers waiting for a job)
                 LangDetectionJob currentJob = inQueue.take();
 
+                // TODO key range and k-mer size shouldn't be specified here, they have to match the store and parser values
+                // create language distribution for the user's query and record the k-mer values to it
                 LangDist testDist = new HashedLangDist(512);
                 testDist.recordSample(currentJob.getSampleText(), 3);
 
+                // find the closest language from the store of known language distributions, using whichever
+                // LangDetectorStrategy was given to this worker through the LangDetector
                 Lang closest = langDetector.findClosestLanguage(testDist, distStore);
+                // update job result with detected language
                 currentJob.setResult(closest);
 
+                // put the job result out onto the out map to be later viewed by the user
                 outMap.put(currentJob.getId(), currentJob);
             } catch (InterruptedException e) {
                 e.printStackTrace();

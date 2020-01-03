@@ -8,6 +8,9 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
 import ie.gmit.sw.sample_parser.FileSampleParser;
 
+/**
+ * TODO remove this test class
+ */
 public class TestLangDetector {
     public static void main(String[] args) {
         System.out.println("Building subject db...");

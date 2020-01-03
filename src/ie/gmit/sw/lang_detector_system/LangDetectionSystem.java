@@ -25,6 +25,7 @@ public class LangDetectionSystem {
      * @param numWorkers Number of asynchronous worker threads to run with the system
      */
     public LangDetectionSystem(LangDistStore distStore, int inQueueCap, int numWorkers) {
+        // initialise queues and workers
         inQueue = new ArrayBlockingQueue<>(inQueueCap);
         outMap = new ConcurrentHashMap<>();
         workers = new LangDetectionWorker[numWorkers];

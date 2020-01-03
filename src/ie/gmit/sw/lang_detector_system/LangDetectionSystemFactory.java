@@ -25,10 +25,15 @@ public class LangDetectionSystemFactory {
      * Builds a standard language detection system with using appropriate parameters. Relies on the existence of
      * a data set file of language samples at a specific path.
      *
+     * File: LANGUAGE_DATA_SET from web.xml
+     * Mapped store k-mer hash range: 512 values
+     * In-queue size: 50
+     * Number of asynchronous workers: 4
+     *
      * @return Created language detection system.
      */
     public LangDetectionSystem getStandardLangDetectionSystem() {
-        // build kmer distribution for all languages from language dataset
+        // build k-mer distribution for all languages from language dataset
         LangDistStore distStore = new LangDistStoreBuilder()
             .withMappedStore(512)
             .registerParser(

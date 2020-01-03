@@ -51,7 +51,9 @@ public class HashedLangDist extends LangDist {
 
         // compute array index (ignoring sign bit)
         int index = (hash & 0x7FFFFFFF) % hashRange;
+        // record k-mer
         freqs[index]++;
+        // record the 1st character of the k-mer too, to help detect languages with large alphabets (eg. Chinese)
         freqs[kmer[0] % hashRange]++;
     }
 

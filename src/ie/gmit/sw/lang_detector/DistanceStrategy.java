@@ -20,7 +20,6 @@ public class DistanceStrategy implements LangDetectorStrategy {
      */
     @Override
     public Lang findClosestLanguage(LangDist unidentifiedLang, LangDistStore store) {
-        // use frequency analysis to find the language that matches the closest
         double[] unidentifiedDist = unidentifiedLang.getFrequencies();
         double lowestDist = Double.MAX_VALUE;
         Lang bestFitLang = Lang.Unidentified;
@@ -40,6 +39,13 @@ public class DistanceStrategy implements LangDetectorStrategy {
         return bestFitLang;
     }
 
+    /**
+     * Total distance between two frequency distributions.
+     *
+     * @param dist1 Distribution frequency from a language distribution.
+     * @param dist2 Distribution frequency from a language distribution.
+     * @return Sum of the differences between values at each index of these arrays.
+     */
     private double getDistance(double[] dist1, double[] dist2) {
         double totalDist = 0;
 
