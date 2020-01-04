@@ -1,6 +1,6 @@
 package ie.gmit.sw.sample_parser;
 
-import ie.gmit.sw.lang_dist.LangDistStore;
+import ie.gmit.sw.language_distribution.LangDistStore;
 
 import java.io.*;
 
@@ -35,7 +35,6 @@ public class FileSampleParser extends SampleParser {
             // read file line by line
             while ((line = in.readLine()) != null) {
                 // split language sample and name
-                // TODO regex remove things like symbols, numbers, etc
                 String[] parts = line.trim().split("@");
                 if (parts.length == 2) {
                     parseSample(parts[1], parts[0], store);

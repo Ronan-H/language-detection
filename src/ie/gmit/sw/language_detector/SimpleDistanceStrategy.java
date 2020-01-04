@@ -1,4 +1,4 @@
-package ie.gmit.sw.lang_detector;
+package ie.gmit.sw.language_detector;
 
 /**
  * A simple strategy for detecting an unknown language: finds the language in a LangDistStore which has

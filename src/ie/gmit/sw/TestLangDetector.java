@@ -1,11 +1,10 @@
 package ie.gmit.sw;
 
-import ie.gmit.sw.lang_detector.LangDetector;
-import ie.gmit.sw.lang_detector.LangDetectorFactory;
-import ie.gmit.sw.lang_dist.HashedLangDist;
-import ie.gmit.sw.lang_dist.LangDist;
-import ie.gmit.sw.lang_dist.LangDistStore;
-import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
+import ie.gmit.sw.language_detector.LangDetector;
+import ie.gmit.sw.language_detector.LangDetectorFactory;
+import ie.gmit.sw.language_distribution.LangDist;
+import ie.gmit.sw.language_distribution.LangDistStore;
+import ie.gmit.sw.language_distribution.LangDistStoreBuilder;
 import ie.gmit.sw.sample_parser.FileSampleParser;
 
 import java.io.File;

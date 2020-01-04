@@ -1,10 +1,10 @@
 package ie.gmit.sw;
 
-import ie.gmit.sw.lang_detector.LangDetector;
-import ie.gmit.sw.lang_detector.LangDetectorFactory;
-import ie.gmit.sw.lang_detector_system.LangDetectionSystem;
-import ie.gmit.sw.lang_dist.LangDistStore;
-import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
+import ie.gmit.sw.language_detector.LangDetector;
+import ie.gmit.sw.language_detector.LangDetectorFactory;
+import ie.gmit.sw.language_detector_system.LangDetectionSystem;
+import ie.gmit.sw.language_distribution.LangDistStore;
+import ie.gmit.sw.language_distribution.LangDistStoreBuilder;
 import ie.gmit.sw.sample_parser.FileSampleParser;
 
 import java.io.*;
@@ -83,9 +83,6 @@ public class ServiceHandler extends HttpServlet {
 		String query = req.getParameter("query");
 		String taskNumber = req.getParameter("frmTaskNumber");
 
-		// TODO fix some languages (inc. Chinese) characters not properly support by servlet char encoding
-		System.out.println("Query: " + query);
-
 		out.print("<html><head><title>Advanced Object Oriented Software Development Assignment</title>");
 		out.print("<meta charset=\"UTF-8\">");
 		out.print("</head>");
@@ -101,6 +98,7 @@ public class ServiceHandler extends HttpServlet {
 		if (taskNumber == null) {
 			taskNumber = String.format("T%d", jobNumber++);
 
+			// TODO fix langdetectors being shared across all workers (stragegy may not be the same)
 			// switch to the selected language detection algorithm
 			langDetector.switchToStrategy(metricOption);
 

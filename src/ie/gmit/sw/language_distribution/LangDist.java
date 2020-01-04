@@ -1,4 +1,4 @@
-package ie.gmit.sw.lang_dist;
+package ie.gmit.sw.language_distribution;
 
 import ie.gmit.sw.Lang;
 

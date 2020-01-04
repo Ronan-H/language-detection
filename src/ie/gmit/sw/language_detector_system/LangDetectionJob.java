@@ -1,4 +1,4 @@
-package ie.gmit.sw.lang_detector_system;
+package ie.gmit.sw.language_detector_system;
 
 import ie.gmit.sw.Lang;
 

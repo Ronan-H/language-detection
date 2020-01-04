@@ -1,7 +1,7 @@
 package ie.gmit.sw.sample_parser;
 
 import ie.gmit.sw.Lang;
-import ie.gmit.sw.lang_dist.LangDistStore;
+import ie.gmit.sw.language_distribution.LangDistStore;
 
 /**
  * Represents some way of parsing sample language data (may be from a file,

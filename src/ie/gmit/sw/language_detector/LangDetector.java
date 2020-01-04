@@ -1,8 +1,8 @@
-package ie.gmit.sw.lang_detector;
+package ie.gmit.sw.language_detector;
 
 import ie.gmit.sw.Lang;
-import ie.gmit.sw.lang_dist.LangDist;
-import ie.gmit.sw.lang_dist.LangDistStore;
+import ie.gmit.sw.language_distribution.LangDist;
+import ie.gmit.sw.language_distribution.LangDistStore;
 
 import java.util.Map;
 

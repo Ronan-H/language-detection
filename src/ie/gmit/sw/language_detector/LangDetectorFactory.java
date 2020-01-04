@@ -1,4 +1,4 @@
-package ie.gmit.sw.lang_detector;
+package ie.gmit.sw.language_detector;
 
 import java.util.HashMap;
 import java.util.Map;

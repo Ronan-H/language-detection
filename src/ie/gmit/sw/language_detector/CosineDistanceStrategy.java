@@ -1,4 +1,4 @@
-package ie.gmit.sw.lang_detector;
+package ie.gmit.sw.language_detector;
 
 /**
  * Language detector strategy using the cosine similarity metric to compare language distributions.

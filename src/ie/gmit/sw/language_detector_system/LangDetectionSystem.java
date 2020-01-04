@@ -1,7 +1,7 @@
-package ie.gmit.sw.lang_detector_system;
+package ie.gmit.sw.language_detector_system;
 
-import ie.gmit.sw.lang_detector.LangDetector;
-import ie.gmit.sw.lang_dist.LangDistStore;
+import ie.gmit.sw.language_detector.LangDetector;
+import ie.gmit.sw.language_distribution.LangDistStore;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
