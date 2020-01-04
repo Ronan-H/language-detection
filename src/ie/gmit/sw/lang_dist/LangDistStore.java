@@ -18,4 +18,23 @@ public interface LangDistStore {
      * Retrieves the set of language keys
      */
     Set<Lang> getKeySet();
+
+    /**
+     * Get the length of k-mer that this store uses.
+     */
+    int getKmerLength();
+
+    /**
+     * Creates a new (empty) language distribution of the same type that this
+     * store uses.
+     */
+    LangDist getNewDistOfSameType(Lang distLang);
+
+    /**
+     * Convenience method, assuming new language distributions created after the store are for
+     * user queries.
+     */
+    default LangDist getNewDistOfSameType() {
+        return getNewDistOfSameType(Lang.Unidentified);
+    }
 }

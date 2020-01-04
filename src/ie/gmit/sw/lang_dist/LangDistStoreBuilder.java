@@ -23,10 +23,11 @@ public class LangDistStoreBuilder {
      * Creates a new LangDistMap to use for this builder.
      *
      * @param hashRange Range of hashed k-mer values (passed to constructor of LangDistMap).
+     * @param kmerLength Length of k-mer to use for this store.
      * @return This builder.
      */
-    public LangDistStoreBuilder withMappedStore(int hashRange) {
-        store = new LangDistMap(hashRange);
+    public LangDistStoreBuilder withMappedStore(int hashRange, int kmerLength) {
+        store = new LangDistMap(hashRange ,kmerLength);
 
         return this;
     }

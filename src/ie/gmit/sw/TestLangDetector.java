@@ -8,16 +8,19 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
 import ie.gmit.sw.sample_parser.FileSampleParser;
 
+import java.io.File;
+
 /**
  * TODO remove this test class
  */
 public class TestLangDetector {
+
     public static void main(String[] args) {
         System.out.println("Building subject db...");
         LangDistStore store = new LangDistStoreBuilder()
             .withMappedStore(512)
             .registerParser(
-                new FileSampleParser("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt")
+                new FileSampleParser(new File("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt"))
             )
         .build();
         System.out.println("Finished. Evaluating test string...");

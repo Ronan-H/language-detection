@@ -1,7 +1,9 @@
 package ie.gmit.sw;
 
 import ie.gmit.sw.lang_detector_system.LangDetectionSystem;
-import ie.gmit.sw.lang_detector_system.LangDetectionSystemFactory;
+import ie.gmit.sw.lang_dist.LangDistStore;
+import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
+import ie.gmit.sw.sample_parser.FileSampleParser;
 
 import java.io.*;
 import javax.servlet.*;
@@ -44,11 +46,20 @@ public class ServiceHandler extends HttpServlet {
 		ServletContext ctx = getServletContext(); //Get a handle on the application context
 		languageDataSet = ctx.getInitParameter("LANGUAGE_DATA_SET"); //Reads the value from the <context-param> in web.xml
 
-		//You can start to build the subject database at this point. The init() method is only ever called once during the life cycle of a servlet
-
 		f = new File(languageDataSet);
+		// TODO remove this line
+		f = new File("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt");
 
-		langDetectionSystem = LangDetectionSystemFactory.getInstance().getStandardLangDetectionSystem();
+		// build k-mer distribution for all languages from language dataset
+		LangDistStore distStore = new LangDistStoreBuilder()
+			.withMappedStore(512, 3)
+			.registerParser(
+				new FileSampleParser(f)
+			)
+		.build();
+
+		// create language detection system and start workers
+		langDetectionSystem = new LangDetectionSystem(distStore, 50, 4);
 		langDetectionSystem.go();
 	}
 

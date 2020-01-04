@@ -10,7 +10,9 @@ import java.util.Set;
  * Represents a store of language distribution objects using a Map.
  */
 public class LangDistMap implements LangDistStore {
+    private int hashRange;
     private Map<Lang, LangDist> map;
+    private int kmerLength;
 
     /**
      * Constructs a new language distribution map with a given hash range.
@@ -18,7 +20,9 @@ public class LangDistMap implements LangDistStore {
      *
      * @param hashRange Hash range to use for this mapped store.
      */
-    public LangDistMap(int hashRange) {
+    public LangDistMap(int hashRange, int kmerLength) {
+        this.hashRange = hashRange;
+        this.kmerLength = kmerLength;
         map = new HashMap<>();
 
         Lang[] allLangs = Lang.values();
@@ -38,5 +42,15 @@ public class LangDistMap implements LangDistStore {
     @Override
     public Set<Lang> getKeySet() {
         return map.keySet();
+    }
+
+    @Override
+    public int getKmerLength() {
+        return kmerLength;
+    }
+
+    @Override
+    public LangDist getNewDistOfSameType(Lang distLang) {
+        return new HashedLangDist(distLang, hashRange);
     }
 }

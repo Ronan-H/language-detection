@@ -19,11 +19,10 @@ public abstract class SampleParser {
      *
      * @param lang Language of the associated text (may be Unidentified).
      * @param text Text sample.
-     * @param k K-mer length.
      * @param store Store to record the resulting k-mers into.
      */
-    public void parseSample(String lang, String text, int k, LangDistStore store) {
+    public void parseSample(String lang, String text, LangDistStore store) {
         Lang language = Lang.valueOf(lang);
-        store.getDistribution(language).recordSample(text, k);
+        store.getDistribution(language).recordSample(text, store.getKmerLength());
     }
 }

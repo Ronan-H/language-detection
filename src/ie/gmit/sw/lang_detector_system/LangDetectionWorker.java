@@ -2,7 +2,6 @@ package ie.gmit.sw.lang_detector_system;
 
 import ie.gmit.sw.Lang;
 import ie.gmit.sw.lang_detector.LangDetector;
-import ie.gmit.sw.lang_dist.HashedLangDist;
 import ie.gmit.sw.lang_dist.LangDist;
 import ie.gmit.sw.lang_dist.LangDistStore;
 
@@ -47,11 +46,10 @@ public class LangDetectionWorker implements Runnable {
                 // take job from in-queue (blocking)
                 // (there may be multiple workers waiting for a job)
                 LangDetectionJob currentJob = inQueue.take();
-
-                // TODO key range and k-mer size shouldn't be specified here, they have to match the store and parser values
+                
                 // create language distribution for the user's query and record the k-mer values to it
-                LangDist testDist = new HashedLangDist(512);
-                testDist.recordSample(currentJob.getSampleText(), 3);
+                LangDist testDist = distStore.getNewDistOfSameType();
+                testDist.recordSample(currentJob.getSampleText(), distStore.getKmerLength());
 
                 // find the closest language from the store of known language distributions, using whichever
                 // LangDetectorStrategy was given to this worker through the LangDetector

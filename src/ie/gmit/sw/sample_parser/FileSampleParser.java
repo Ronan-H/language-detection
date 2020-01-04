@@ -8,15 +8,15 @@ import java.io.*;
  * Allows the parsing of language sample lines from a file into a language distribution store.
  */
 public class FileSampleParser extends SampleParser {
-    private String filePath;
+    private File file;
 
     /**
      * Creates a new file parser at the given path.
      *
-     * @param filePath Path of file to parse.
+     * @param file File to parse.
      */
-    public FileSampleParser(String filePath) {
-        this.filePath = filePath;
+    public FileSampleParser(File file) {
+        this.file = file;
     }
 
     /**
@@ -29,7 +29,7 @@ public class FileSampleParser extends SampleParser {
     @Override
     public void parseAll(LangDistStore store) {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(filePath));
+            BufferedReader in = new BufferedReader(new FileReader(file));
             String line;
 
             // read file line by line
@@ -38,7 +38,7 @@ public class FileSampleParser extends SampleParser {
                 // TODO regex remove things like symbols, numbers, etc
                 String[] parts = line.trim().split("@");
                 if (parts.length == 2) {
-                    parseSample(parts[1], parts[0], 3, store);
+                    parseSample(parts[1], parts[0], store);
                 }
             }
 
