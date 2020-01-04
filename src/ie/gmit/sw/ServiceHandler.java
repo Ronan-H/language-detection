@@ -1,5 +1,7 @@
 package ie.gmit.sw;
 
+import ie.gmit.sw.lang_detector.LangDetector;
+import ie.gmit.sw.lang_detector.LangDetectorFactory;
 import ie.gmit.sw.lang_detector_system.LangDetectionSystem;
 import ie.gmit.sw.lang_dist.LangDistStore;
 import ie.gmit.sw.lang_dist.LangDistStoreBuilder;
@@ -38,6 +40,7 @@ public class ServiceHandler extends HttpServlet {
 	private File f;
 
 	private LangDetectionSystem langDetectionSystem;
+	private LangDetector langDetector;
 
 	/**
 	 * Initialises servlet and language detection system.
@@ -58,8 +61,10 @@ public class ServiceHandler extends HttpServlet {
 			)
 		.build();
 
-		// create language detection system and start workers
-		langDetectionSystem = new LangDetectionSystem(distStore, 50, 4);
+		// create language detection system
+		langDetector = LangDetectorFactory.getInstance().getLanguageDetector("Out-of-place");
+		langDetectionSystem = new LangDetectionSystem(distStore, langDetector,50, 4);
+		// start workers
 		langDetectionSystem.go();
 	}
 
@@ -69,27 +74,37 @@ public class ServiceHandler extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setContentType("text/html"); //Output the MIME type
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
 		PrintWriter out = resp.getWriter(); //Write out text. We can write out binary too and change the MIME type...
 
 		//Initialise some request variables with the submitted form info. These are local to this method and thread safe...
-		String option = req.getParameter("cmbOptions"); //Change options to whatever you think adds value to your assignment...
-		String s = req.getParameter("query");
+		String metricOption = req.getParameter("cmbOptions"); //Change options to whatever you think adds value to your assignment...
+		String query = req.getParameter("query");
 		String taskNumber = req.getParameter("frmTaskNumber");
 
+		// TODO fix some languages (inc. Chinese) characters not properly support by servlet char encoding
+		System.out.println("Query: " + query);
+
 		out.print("<html><head><title>Advanced Object Oriented Software Development Assignment</title>");
+		out.print("<meta charset=\"UTF-8\">");
 		out.print("</head>");
 		out.print("<body>");
 		out.print("<div id=\"r\"></div>");
 
 		out.print("<font color=\"#993333\"><b>");
 		out.print("Language Dataset is located at " + languageDataSet + " and is <b><u>" + f.length() + "</u></b> bytes in size");
-		out.print("<br>Option(s): " + option);
-		out.print("<br>Query Text : " + s);
+		out.print("<br><br>Distance metric: " + metricOption);
+		out.print("<br><br>Query Text : " + query);
 		out.print("</font></b><br>");
 
 		if (taskNumber == null) {
 			taskNumber = String.format("T%d", jobNumber++);
-			langDetectionSystem.submitJob(taskNumber, s);
+
+			// switch to the selected language detection algorithm
+			langDetector.switchToStrategy(metricOption);
+
+			langDetectionSystem.submitJob(taskNumber, query);
 		}
 
 		if (langDetectionSystem.isJobFinished(taskNumber)) {
@@ -104,8 +119,8 @@ public class ServiceHandler extends HttpServlet {
 		}
 
 		out.print("<form method=\"POST\" name=\"frmRequestDetails\">");
-		out.print("<input name=\"cmbOptions\" type=\"hidden\" value=\"" + option + "\">");
-		out.print("<input name=\"query\" type=\"hidden\" value=\"" + s + "\">");
+		out.print("<input name=\"cmbOptions\" type=\"hidden\" value=\"" + metricOption + "\">");
+		out.print("<input name=\"query\" type=\"hidden\" value=\"" + query + "\">");
 		out.print("<input name=\"frmTaskNumber\" type=\"hidden\" value=\"" + taskNumber + "\">");
 		out.print("</form>");
 		out.print("</body>");

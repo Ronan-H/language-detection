@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@ include file="includes/header.jsp" %>
 
 <div class="animated bounceInDown" style="font-size:48pt; font-family:arial; color:#990000; font-weight:bold">Language Detection System</div>
@@ -12,12 +13,12 @@
 				<fieldset>
 					<legend><h3>Specify Details</h3></legend>
 				
-					<b>Select Option:</b>
+					<b>Select distance metric:</b>
 						
 					<select name="cmbOptions">
-						<option selected>Option 1</option>
-						<option>Option 2</option>
-						<option>Option 3</option>
+						<option>Out-of-place</option>
+						<option>Simple distance</option>
+						<option selected>Cosine distance</option>
 					</select>	
 					<p/>
 

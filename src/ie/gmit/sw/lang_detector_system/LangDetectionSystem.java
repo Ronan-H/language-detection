@@ -1,6 +1,6 @@
 package ie.gmit.sw.lang_detector_system;
 
-import ie.gmit.sw.lang_detector.LangDetectorFactory;
+import ie.gmit.sw.lang_detector.LangDetector;
 import ie.gmit.sw.lang_dist.LangDistStore;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -21,17 +21,18 @@ public class LangDetectionSystem {
      * Constructs a LangDetectionSystem using a store of language frequency distributions, and some extra parameters.
      *
      * @param distStore Store of language distributions
+     * @param langDetector Language detector to use (contains an underlying strategy for detecting languages)
      * @param inQueueCap Maximum size for input queue (blocking)
      * @param numWorkers Number of asynchronous worker threads to run with the system
      */
-    public LangDetectionSystem(LangDistStore distStore, int inQueueCap, int numWorkers) {
+    public LangDetectionSystem(LangDistStore distStore, LangDetector langDetector, int inQueueCap, int numWorkers) {
         // initialise queues and workers
         inQueue = new ArrayBlockingQueue<>(inQueueCap);
         outMap = new ConcurrentHashMap<>();
         workers = new LangDetectionWorker[numWorkers];
 
         for (int i = 0; i < workers.length; i++) {
-            workers[i] = new LangDetectionWorker(distStore, inQueue, outMap, LangDetectorFactory.getInstance().getOutOfPlaceLanguageDetector());
+            workers[i] = new LangDetectionWorker(distStore, inQueue, outMap, langDetector);
         }
     }
 

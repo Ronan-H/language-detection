@@ -18,7 +18,7 @@ public class TestLangDetector {
     public static void main(String[] args) {
         System.out.println("Building subject db...");
         LangDistStore store = new LangDistStoreBuilder()
-            .withMappedStore(512)
+            .withMappedStore(512, 3)
             .registerParser(
                 new FileSampleParser(new File("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt"))
             )
@@ -33,11 +33,13 @@ public class TestLangDetector {
         String latin = "Confíteor Deo omnipoténti, beátæMaríæ semper Vírgini, beáto MichaéliArchángelo, beáto Joánni Baptístæ,sanctis Apóstolis Petro et Paulo,ómnibus Sanctis, et vobis fratres: quiapeccávi nimis cogitatióne, verbo, etópere:  mea culpa, mea culpa, meamáxima culpa. Ídeo precor beátamMaríam semper Vírginem, beátumMichaélem Archángelum, beátumJoánnem Baptístam, sanctosApóstolos Petrum et Paulum, omnesSanctos, et vos fratres, oráre pro mead Dóminum Deum nostrum";
         String dutch  = "Een ieder heeft recht op onderwijs; het onderwijs zal kosteloos zijn, althans wat het lager en basisonderwijs betreft. Het lager onderwijs zal verplicht zijn. Ambachtsonderwijs en beroepsopleiding zullen algemeen beschikbaar worden gesteld. Hoger onderwijs zal openstaan voor een ieder, die daartoe de begaafdheid bezit.  Het onderwijs zal gericht zijn op de volle ontwikkeling van de menselijke persoonlijkheid en op de versterking van de eerbied voor de rechten van de mens en de fundamentele vrijheden. Het zal het begrip, de verdraagzaamheid en de vriendschap onder alle naties, rassen of godsdienstige groepen bevorderen en het zal de werkzaamheden van de Verenigde Naties voor de handhaving van de vrede steunen. Aan de ouders komt in de eerste plaats het recht toe om de soort van opvoeding en onderwijs te kiezen, welke aan hun kinderen zal worden gegeven.";
         String japanese = "明日は英語のテストだろう、だったら今晩は数学の宿題にかかずらわっちゃだめだ。";
+        String arabic = "أنا إسمي فاطمة, أعيش في مصر, أبلغ من العمر 20 سنة, أدرس بجامعة القاهرة, أحب بلدي كثيرا, أذهب مع أصدقائي لزيارة الأهرامات مرة في الشهر, أحب أيضا المشي بجانب نهر النيل حيث النسيم المنعش و المنظر الخلاب.";
+        String swedish = "Envar har rätt till undervisning. Undervisningen skall vara kostnadsfri, åtminstone på de elementära och grundläggande stadierna.Den elementära undervisningen skall vara obligatorisk. Yrkesundervisning och teknisk undervisning skall vara allmänt tillgänglig. Den högre undervisningen skall stå öppen i lika mån för alla på grundval av deras duglighet. Undervisningen skall syfta till personlighetens fulla utveckling och till att stärka respekten för människans grundläggande fri- och rättigheter. Undervisningen skall främja förståelse, tolerans och vänskap mellan alla nationer, rasgrupper och religiösa grupper samt befordra Förenta Nationernas verksamhet för fredens bevarande. Rätten att välja den undervisning, som skall ges åt barnen, tillkommer i främsta rummet deras föräldrar.";
 
-        LangDist testDist = new HashedLangDist(512);
-        testDist.recordSample(dutch, 3);
+        LangDist testDist = store.getNewDistOfSameType();
+        testDist.recordSample(chinese, store.getKmerLength());
 
-        LangDetector langDetector = LangDetectorFactory.getInstance().getSmallestDistanceLanguageDetector();
+        LangDetector langDetector = LangDetectorFactory.getInstance().getLanguageDetector("Cosine distance");
         Lang closest = langDetector.findClosestLanguage(testDist, store);
         System.out.println("Closest lang: " + closest.getLanguageName());
     }

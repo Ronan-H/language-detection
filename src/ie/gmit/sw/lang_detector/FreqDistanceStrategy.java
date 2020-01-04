@@ -7,15 +7,14 @@ import ie.gmit.sw.lang_dist.LangDistStore;
 import java.util.Set;
 
 /**
- * A simple strategy for detecting an unknown language: finds the language in a LangDistStore which has
- * the smallest total difference for each k-mer frequency value.
+ * A language detector strategy which compares language distributions using some distance value metric.
  */
-public class DistanceStrategy implements LangDetectorStrategy {
+public abstract class FreqDistanceStrategy implements LangDetectorStrategy {
     /**
      * Performs this strategy on an unidentified language distribution and a store of known language k-mers.
      *
      * @param unidentifiedLang K-mer distribution of the unidentified language sample.
-     * @param store K-mer distribution store for all known languages
+     * @param store            K-mer distribution store for all known languages
      * @return Closest known language using this strategy.
      */
     @Override
@@ -40,19 +39,11 @@ public class DistanceStrategy implements LangDetectorStrategy {
     }
 
     /**
-     * Total distance between two frequency distributions.
+     * Distance between two frequency distributions, where smaller values = more similar languages.
      *
-     * @param dist1 Distribution frequency from a language distribution.
-     * @param dist2 Distribution frequency from a language distribution.
-     * @return Sum of the differences between values at each index of these arrays.
+     * @param distA Distribution frequency from a language distribution.
+     * @param distB Distribution frequency from a language distribution.
+     * @return Floating point value between 0 and 1, where smaller values indicate more similarity.
      */
-    private double getDistance(double[] dist1, double[] dist2) {
-        double totalDist = 0;
-
-        for (int i = 0; i < dist1.length; i++) {
-            totalDist += Math.abs(dist1[i] - dist2[i]);
-        }
-
-        return totalDist;
-    }
+    public abstract double getDistance(double[] distA, double[] distB);
 }

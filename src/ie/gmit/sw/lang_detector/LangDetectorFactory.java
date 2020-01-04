@@ -1,7 +1,10 @@
 package ie.gmit.sw.lang_detector;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Responsible for creating different types of LangDetector. Hides the complexity of creating these objects.
+ * Responsible for creating LangDetectors. Hides the complexity of creating a LangDetector.
  */
 public class LangDetectorFactory {
     private static LangDetectorFactory instance;
@@ -17,21 +20,18 @@ public class LangDetectorFactory {
     }
 
     /**
-     * Creates a language detector that uses the out-of-place metric for comparing language distributions.
+     * Builds a language detector with all the available detecting strategies.
      *
-     * @return Created language detector.
+     * @param defaultAlgorithm Name of default algorithm to use (e.g. "Out-of-place")
+     * @return Language detector with all the available detecting strategies.
      */
-    public LangDetector getOutOfPlaceLanguageDetector() {
-        return new LangDetector(new OutOfPlaceStrategy());
-    }
+    public LangDetector getLanguageDetector(String defaultAlgorithm) {
+        Map<String, LangDetectorStrategy> strategies = new HashMap<>();
 
-    /**
-     * Creates a language detector that compares language distributions based on the total distance between all
-     * k-mer frequency values.
-     *
-     * @return Created language detector.
-     */
-    public LangDetector getSmallestDistanceLanguageDetector() {
-        return new LangDetector(new DistanceStrategy());
+        strategies.put("Out-of-place", new OutOfPlaceStrategy());
+        strategies.put("Simple distance", new SimpleDistanceStrategy());
+        strategies.put("Cosine distance", new CosineDistanceStrategy());
+
+        return new LangDetector(strategies, defaultAlgorithm);
     }
 }
