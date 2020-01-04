@@ -16,9 +16,9 @@
 					<b>Select distance metric:</b>
 						
 					<select name="cmbOptions">
-						<option>Out-of-place</option>
+						<option selected>Out-of-place</option>
 						<option>Simple distance</option>
-						<option selected>Cosine distance</option>
+						<option>Cosine distance</option>
 					</select>	
 					<p/>
 

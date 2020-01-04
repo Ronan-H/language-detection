@@ -16,21 +16,21 @@ public class LangDetectionJob {
     }
 
     /**
-     * Job ID
+     * Job ID.
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Sample text (query text entered by the user)
+     * Sample text (query text entered by the user).
      */
     public String getSampleText() {
         return sampleText;
     }
 
     /**
-     * Detected language (null until set externally)
+     * Detected language (null until set externally).
      */
     public Lang getResult() {
         return result;
@@ -41,7 +41,7 @@ public class LangDetectionJob {
     }
 
     /**
-     * Compares jobs based on job ID
+     * Compares jobs based on job ID.
      *
      * @param otherObj LangDetectionJob to compare to.
      * @return True if their IDs match.

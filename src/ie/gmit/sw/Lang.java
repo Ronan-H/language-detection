@@ -249,9 +249,9 @@ public enum Lang {
     }
 
 	/**
-	 * Get String name of language enum.
+	 * Get the name of a language enum.
 	 *
-	 * @return String name.
+	 * @return Name of language.
 	 */
 	public String getLanguageName() {
         return this.language;

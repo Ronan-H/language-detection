@@ -10,6 +10,7 @@ import ie.gmit.sw.language_distribution.LangDistStore;
 public abstract class SampleParser {
     /**
      * Parse all languages samples associated with this parser.
+     *
      * @param store Store to record the resulting k-mers into.
      */
     public abstract void parseAll(LangDistStore store);

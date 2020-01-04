@@ -1,0 +1,18 @@
+/*
+ * To compile this servlet, open a command prompt in the web application directory and execute the following commands:
+ *
+ * Linux/Mac																	Windows
+ * ---------																	---------
+ * cd WEB-INF/classes/															cd WEB-INF\classes\
+ * javac -cp .:$TOMCAT_HOME/lib/servlet-api.jar ie/gmit/sw/*.java				javac -cp .:%TOMCAT_HOME%/lib/servlet-api.jar ie/gmit/sw/*.java
+ * cd ../../																	cd ..\..\
+ * jar -cf ngrams.war *															jar -cf ngrams.war *
+ *
+ * Drag and drop the file ngrams.war into the webapps directory of Tomcat to deploy the application. It will then be
+ * accessible from http://localhost:8080.
+ *
+ * NOTE: the text file containing the 253 different languages needs to be placed in /data/wili-2018-Edited.txt. This means
+ * that you must have a "data" directory in the root of your file system that contains a file called "wili-2018-Edited.txt".
+ * Do NOT submit the wili-2018 text file with your assignment!
+ *
+*/

@@ -25,16 +25,6 @@ public class HashedLangDist extends LangDist {
     }
 
     /**
-     * Creates a new hashed language distribution, where the language is not known
-     * (used for the user's query)
-     *
-     * @param keyRange Range of the hash function
-     */
-    public HashedLangDist(int keyRange) {
-        this(Lang.Unidentified, keyRange);
-    }
-
-    /**
      * Records a single k-mer to this language distribution, by hashing the k-mer in order
      * to record it into an array instead of a map.
      *

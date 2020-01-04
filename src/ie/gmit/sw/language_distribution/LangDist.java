@@ -20,7 +20,9 @@ public abstract class LangDist {
     }
 
     /**
-     * Record a k-mer to this distribution
+     * Record a k-mer to this distribution.
+     *
+     * @param kmer K-mer to record an occurrence of.
      */
     public abstract void recordKmer(char[] kmer);
 
