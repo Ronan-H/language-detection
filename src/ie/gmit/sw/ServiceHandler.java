@@ -63,50 +63,61 @@ public class ServiceHandler extends HttpServlet {
 		String query = req.getParameter("query");
 		String taskNumber = req.getParameter("frmTaskNumber");
 
-		out.print("<html><head><title>Advanced Object Oriented Software Development Assignment</title>");
+		out.print("<!DOCTYPE html><html><head><title>Advanced Object Oriented Software Development Assignment</title>");
 		out.print("<meta charset=\"UTF-8\">");
 		out.print("</head>");
 		out.print("<body>");
 		out.print("<div id=\"r\"></div>");
-		out.print("<font color=\"#993333\"><b>");
-		out.print("Language Dataset is located at " + languageDataSet + " and is <b><u>" + f.length() + "</u></b> bytes in size");
-		out.print("<br><br>Distance metric: " + metricOption);
-		out.print("<br><br>Query Text : " + query);
-		out.print("</font></b><br>");
 
-		if (taskNumber == null) {
-			// job not yet submitted
-			// create task number
-			taskNumber = String.format("T%d", jobNumber++);
+		// ensure language dataset file was found
+		if (f.exists()) {
+			out.print("<font color=\"#993333\">");
+			out.print("Language Dataset is located at " + languageDataSet + " and is <u>" + f.length() + "</u> bytes in size");
+			out.print("<br><br>Distance metric: " + metricOption);
+			out.print("<br><br>Query Text: " + query);
+			out.print("</font><br>");
 
-			// switch to the selected language detection algorithm
-			langDetector.switchToStrategy(metricOption);
+			if (taskNumber == null) {
+				// job not yet submitted
+				// create task number
+				taskNumber = String.format("T%d", jobNumber++);
 
-			// submit job to the system for processing by a worker
-			langDetectionSystem.submitJob(taskNumber, query);
-		}
+				// switch to the selected language detection algorithm
+				langDetector.switchToStrategy(metricOption);
 
-		if (langDetectionSystem.isJobFinished(taskNumber)) {
-			// job finished, display detected language
-			out.printf("<h2>STATUS: Job %s complete</h2>", taskNumber);
-			out.printf("<h2>Detected language: <font color=\"#00ab00\">%s</font></h2>", langDetectionSystem.getLanguageResult(taskNumber));
+				// submit job to the system for processing by a worker
+				langDetectionSystem.submitJob(taskNumber, query);
+			}
+
+			if (langDetectionSystem.isJobFinished(taskNumber)) {
+				// job finished, display detected language
+				out.printf("<h2>STATUS: Job %s complete</h2>", taskNumber);
+				out.printf("<h2>Detected language: <font color=\"#00ab00\">%s</font></h2>", langDetectionSystem.getLanguageResult(taskNumber));
+			}
+			else {
+				// job still processing
+				out.printf("<h2>STATUS: Processing request for Job#: %s, please wait...</h2>", taskNumber);
+				out.print("<script>");
+				out.print("var wait=setTimeout(\"document.frmRequestDetails.submit();\", 5000);");
+				out.print("</script>");
+			}
+
+			// resubmit form options
+			out.print("<form method=\"POST\" name=\"frmRequestDetails\">");
+			out.print("<input name=\"cmbOptions\" type=\"hidden\" value=\"" + metricOption + "\">");
+			out.print("<input name=\"query\" type=\"hidden\" value=\"" + query + "\">");
+			out.print("<input name=\"frmTaskNumber\" type=\"hidden\" value=\"" + taskNumber + "\">");
+			out.print("</form>");
 		}
 		else {
-			// job still processing
-			out.printf("<h2>STATUS: Processing request for Job#: %s, please wait...</h2>", taskNumber);
-			out.print("<script>");
-			out.print("var wait=setTimeout(\"document.frmRequestDetails.submit();\", 5000);");
-			out.print("</script>");
+			// dataset file not found
+			out.print("<font color=\"#FF2222\"><b>");
+			out.print("Language Dataset was not found at " + languageDataSet);
+			out.print("</b></font><font color=\"#993333\">");
+			out.print("<br>Place the file in the above location and reload tomcat.</font>");
 		}
 
-		// resubmit form options
-		out.print("<form method=\"POST\" name=\"frmRequestDetails\">");
-		out.print("<input name=\"cmbOptions\" type=\"hidden\" value=\"" + metricOption + "\">");
-		out.print("<input name=\"query\" type=\"hidden\" value=\"" + query + "\">");
-		out.print("<input name=\"frmTaskNumber\" type=\"hidden\" value=\"" + taskNumber + "\">");
-		out.print("</form>");
-		out.print("</body>");
-		out.print("</html>");
+		out.print("</body></html>");
 	}
 
 	/**
