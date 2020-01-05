@@ -1,0 +1,2 @@
+jar -cf ngrams.war *
+javadoc -d docs/ ./src/ie/gmit/sw/sample_parser/FileSampleParser.java

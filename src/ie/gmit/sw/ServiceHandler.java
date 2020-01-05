@@ -31,8 +31,6 @@ public class ServiceHandler extends HttpServlet {
 		languageDataSet = ctx.getInitParameter("LANGUAGE_DATA_SET"); //Reads the value from the <context-param> in web.xml
 
 		f = new File(languageDataSet);
-		// TODO remove this line
-		f = new File("/home/ronan/Downloads/apache-tomcat-9.0.30/bin/data/wili-2018-Edited.txt");
 
 		// build k-mer distribution for all languages from language dataset
 		LangDistStore distStore = new LangDistStoreBuilder()
